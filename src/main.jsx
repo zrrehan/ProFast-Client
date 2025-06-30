@@ -7,6 +7,8 @@ import Home from './Routes/Home';
 import Coverage from './Routes/Coverage';
 import SendItem from './Routes/SendItem';
 import Authentication from './Routes/Authentication';
+import Login from './Components/Auth/Login';
+import Registration from './Components/Auth/Registration';
 
 const router = createBrowserRouter([
     {
@@ -27,8 +29,18 @@ const router = createBrowserRouter([
         ]
     },
     {
-        path: "/authentication",
-        element: <Authentication></Authentication>
+        path: "/",
+        element: <Authentication></Authentication>,
+        children: [
+            {
+                path: "/login",
+                element: <Login></Login>
+            }, 
+            {
+                path: "/registration",
+                element: <Registration></Registration>
+            }
+        ]
     }
 ]);
 

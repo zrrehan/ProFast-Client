@@ -1,4 +1,4 @@
-import { NavLink } from "react-router"
+import { Link, NavLink } from "react-router"
 import logo from "../../Assets/Profast-Logo.png";
 function Navbar() {
     const links = <>
@@ -32,7 +32,7 @@ function Navbar() {
             </div>
             <div className="navbar-end space-x-5">
                 <a className="btn rounded-xl px-5 bg-[##eaeced]">Login</a>
-                <a className="btn rounded-xl px-5 bg-[#CAEB66]">Be a rider</a>
+                <Link to = "/login"><a className="btn rounded-xl px-5 bg-[#CAEB66]">Be a rider</a></Link>
             </div>
         </div>
     )
