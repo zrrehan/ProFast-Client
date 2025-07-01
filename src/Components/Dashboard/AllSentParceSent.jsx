@@ -4,8 +4,7 @@ import { AuthContext } from "../../Context/AuthContext";
 function AllSentParceSent({ dataPromise }) {
     let data = use(dataPromise);
     const {user} = useContext(AuthContext);
-    console.log(user);
-    data = data.map((singleData) => singleData.senderEmail === user.email)
+    data = data.filter((singleData) => singleData.senderEmail === user.email)
     let dataCount = 0;
     return(
         <div>
@@ -32,7 +31,7 @@ function AllSentParceSent({ dataPromise }) {
                                     <td>{singleData.document === "no" ? "Non Document":"Document"}</td>
                                     <td>BDT {singleData.payment}</td>
                                     <td>{singleData.paymentStatus === "Unpaid" ? <div className="badge badge-soft badge-error">Unpaid</div> : <div className="badge badge-soft badge-success">Paid</div>}</td>
-                                    <td className="space-x-2 space-y-2">
+                                    <td className="space-x-2 space-y-2 md:space-y-0">
                                         {
                                             singleData.paymentStatus === "Unpaid" && <button className="btn btn-soft btn-accent rounded-3xl">Pay</button>
                                         }

@@ -11,6 +11,7 @@ import Login from './Components/Auth/Login';
 import Registration from './Components/Auth/Registration';
 import AuthProvider from './Context/AuthProvider';
 import Dashboard from './Routes/Dashboard';
+import PrivateRoute from './PrivateRoute';
 
 const router = createBrowserRouter([
     {
@@ -53,7 +54,9 @@ const router = createBrowserRouter([
 createRoot(document.getElementById('root')).render(
     <StrictMode>
         <AuthProvider>
-            <RouterProvider router={router} />
+            <PrivateRoute>
+                <RouterProvider router={router} />
+            </PrivateRoute>
         </AuthProvider>
     </StrictMode>,
 )
