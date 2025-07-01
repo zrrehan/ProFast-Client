@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { warehouse } from "../Components/Coverage/warehouses";
 import { AuthContext } from "../Context/AuthContext";
+import axios from "axios";
 
 function SendItem() {
     const [senderWarehouse, setSenderWareHouse] = useState([])
@@ -17,15 +18,39 @@ function SendItem() {
         const data = Object.fromEntries(formData.entries());
         console.log(data);
 
+        let payment = 0; 
+        if(data.document === "yes") {
+            if (data.senderWarehouse === data.recieverWarehouse) {
+                payment += 60
+            } else {
+                payment += 80
+            }
+        } else {
+            if (data.parcelWeight <= 3) {
+                data.senderWarehouse === data.recieverWarehouse ?
+                    payment += 110
+                    : payment += 150
+            } else {
+                data.senderWarehouse === data.recieverWarehouse ?
+                    payment += (110 + 40 * (parseInt(data.parcelWeight) - 3))
+                    : payment += (150 + 40 * (parseInt(data.parcelWeight) - 3) + 40)
+            }
+        }
+
         const parcelData = {
             ...data,
             senderEmail: user.email, 
             deliveryStatus: "Pending",
             paymentStatus: "Unpaid", 
-            creationDate: date.toLocaleDateString('en-GB')
+            creationDate: date.toLocaleDateString('en-GB'),
+            payment, 
         }
 
+        console.log(parcelData)
+
         // connect with the backend 
+        axios.post("http://localhost:3000/send-item", parcelData)
+            .then((res) => console.log(res));
     }
 
     function regionChange( person) {
@@ -78,7 +103,7 @@ function SendItem() {
                             <div className="">
                                 <legend className="font-semibold">Sender Region </legend>
                                 {/* <input name="parcelWeight" type="number" className="input  w-full rounded-3xl" placeholder="Sender Region" /> */}
-                                <select name = "senderRegionName" onChange={() => regionChange("sender")} defaultValue="Select a Region" className="select w-full rounded-3xl">
+                                <select name = "senderRegion" onChange={() => regionChange("sender")} defaultValue="Select a Region" className="select w-full rounded-3xl">
                                     <option disabled={true}>Select a Region</option>
                                     <option>Dhaka</option>
                                     <option>Chattogram</option>
@@ -149,8 +174,8 @@ function SendItem() {
 
                             <div className="col-span-2">
                                 <legend className="font-semibold ">Reciever Pickup Ware House</legend>
-                                <select defaultValue="Select Pickup ware House" className="select w-full rounded-3xl">
-                                    <option name = "recieverWarehouse" disabled={true}>Select Pickup ware House</option>
+                                <select name="recieverWarehouse"  defaultValue="Select Pickup ware House" className="select w-full rounded-3xl">
+                                    <option disabled={true}>Select Pickup ware House</option>
                                     {
                                         recieverWarehouse
                                     }
