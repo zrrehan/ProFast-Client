@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { warehouse } from "../Components/Coverage/warehouses";
+import { AuthContext } from "../Context/AuthContext";
 
 function SendItem() {
     const [senderWarehouse, setSenderWareHouse] = useState([])
     const [recieverWarehouse, setRecieverWareHouse] = useState([]);
+    const [nonDocument, setNonDocument] = useState(true);
+    const {user} = useContext(AuthContext);
+    const date = new Date();
 
     function formHandler(event) {
         event.preventDefault();
@@ -12,6 +16,16 @@ function SendItem() {
         
         const data = Object.fromEntries(formData.entries());
         console.log(data);
+
+        const parcelData = {
+            ...data,
+            senderEmail: user.email, 
+            deliveryStatus: "Pending",
+            paymentStatus: "Unpaid", 
+            creationDate: date.toLocaleDateString('en-GB')
+        }
+
+        // connect with the backend 
     }
 
     function regionChange( person) {
@@ -30,12 +44,12 @@ function SendItem() {
     }
     return(
         <div className="text-[#03373D]">
-            <h1>Add Parcel</h1>
+            <h1 className="font-extrabold text-[50px] text-[#03373D] mb-7">Add Parcel</h1>
 
             <form onSubmit={formHandler}>
-                <h1>Enter your parcel details</h1>
-                <input type="radio" value = "yes" name="document" className="radio checked:text-[#CAEB66] checked:border-[#CAEB66]" defaultChecked /> <span className="font-semibold ml-2">Document</span>
-                <input name = "document" value = "no" className="ml-6 radio checked:text-[#CAEB66] checked:border-[#CAEB66]" type="radio" /> <span className="font-semibold ml-2">Non-document</span>
+                <h1 className="font-semibold text-[25px] text-[#03373D] mb-3">Enter your parcel details</h1>
+                <input onClick={() => setNonDocument(false)} type="radio" value = "yes" name="document" className="radio checked:text-[#CAEB66] checked:border-[#CAEB66]" defaultChecked /> <span className="font-semibold ml-2">Document</span>
+                <input onClick={() => setNonDocument(true)}  name = "document" value = "no" className="ml-6 radio checked:text-[#CAEB66] checked:border-[#CAEB66]" type="radio" /> <span className="font-semibold ml-2">Non-document</span>
 
                 <fieldset className="flex flex-col gap-5 md:flex-row lg:justify-between mt-6">
                     <div className="md:w-[50%] ">
@@ -45,7 +59,7 @@ function SendItem() {
 
                     <div className="md:w-[50%]">
                         <legend className="font-semibold">Parcel Weight (KG)</legend>
-                        <input name="parcelWeight" type="number" className="input  w-full rounded-3xl" placeholder="Parcel Weight" />
+                        <input disabled = {!nonDocument} name="parcelWeight" type="number" className="input  w-full rounded-3xl" placeholder="Parcel Weight" />
                     </div>
                 </fieldset>
 

@@ -1,6 +1,10 @@
 import { Link, NavLink } from "react-router"
 import logo from "../../Assets/Profast-Logo.png";
+import { useContext } from "react";
+import { AuthContext } from "../../Context/AuthContext";
 function Navbar() {
+    const { user } = useContext(AuthContext);
+    console.log(user?.photoURL);
     const links = <>
         <NavLink to="/">Services</NavLink>
         <NavLink to="/coverage">Coverage</NavLink>
@@ -31,8 +35,35 @@ function Navbar() {
                 </ul>
             </div>
             <div className="navbar-end space-x-5">
-                <a className="btn rounded-xl px-5 bg-[##eaeced]">Login</a>
-                <Link to = "/login"><a className="btn rounded-xl px-5 bg-[#CAEB66]">Be a rider</a></Link>
+                {
+                    user ? <>
+                        <div className="dropdown dropdown-end">
+                            <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+                                <div className="w-10 rounded-full">
+                                    <img
+                                        alt="DP"
+                                        src={user.photoURL} />
+                                </div>
+                            </div>
+                            <ul
+                                tabIndex={0}
+                                className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+                                <li>
+                                    <a className="justify-between">
+                                        Profile <br /> {user.displayName}
+                                        <span className="badge">New</span>
+                                    </a>
+                                </li>
+                                <li><a>Settings</a></li>
+                                <li><a>Logout</a></li>
+                            </ul>
+                        </div>
+                    </>
+                        : <>
+                            <a className="btn rounded-xl px-5 bg-[##eaeced]">Login</a>
+                            <Link to="/login"><a className="btn rounded-xl px-5 bg-[#CAEB66]">Be a rider</a></Link>
+                        </>
+                }
             </div>
         </div>
     )
