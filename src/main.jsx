@@ -10,6 +10,7 @@ import Authentication from './Routes/Authentication';
 import Login from './Components/Auth/Login';
 import Registration from './Components/Auth/Registration';
 import AuthProvider from './Context/AuthProvider';
+import Dashboard from './Routes/Dashboard';
 
 const router = createBrowserRouter([
     {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
             {
                 path: "/send-item", 
                 element: <SendItem></SendItem>
+            }, 
+            {
+                path: "/dashboard", 
+                element: <Dashboard></Dashboard>
             }
         ]
     },
